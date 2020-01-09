@@ -1,0 +1,3 @@
+TRUNCATE
+  fitscribe_workouts
+  RESTART IDENTITY CASCADE;
