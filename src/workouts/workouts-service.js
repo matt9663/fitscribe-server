@@ -1,10 +1,11 @@
 const xss = require('xss')
 
 const WorkoutsService = {
-  getAllWorkouts(db) {
+  getAllWorkouts(db, id) {
     return db
       .from('fitscribe_workouts AS workouts')
       .select('*')
+      .where('author_id', id)
   },
   serializeWorkout(workout) {
     const { exercises } = workout 
@@ -24,19 +25,19 @@ const WorkoutsService = {
       exercises: [...serializedExercises]
     }
   },
-  getById(db, id) {
-    return WorkoutsService.getAllWorkouts(db)
-      .where('id', id)
+  getById(db, user, workout_id) {
+    return WorkoutsService.getAllWorkouts(db, user.id)
+      .where('id', workout_id)
       .first()
   },
-  insertWorkout(db, newWorkout) {
+  insertWorkout(db, user, newWorkout) {
     return db
       .insert(newWorkout)
       .into('fitscribe_workouts')
       .returning('*')
       .then(([workout]) => workout)
       .then(workout => 
-        WorkoutsService.getById(db, workout.id)
+        WorkoutsService.getById(db, user, workout.id)
       )
   }
 }

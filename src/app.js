@@ -3,9 +3,11 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
-const { NODE_ENV } = require('./config')
+const { NODE_ENV, CLIENT_ORIGIN } = require('./config')
 const workoutsRouter = require('./workouts/workouts-router')
 const usersRouter = require('./users/users-router')
+const authRouter = require('./auth/auth-router')
+
 
 const app = express()
 
@@ -23,6 +25,7 @@ app.use(
 
 app.use('/api/workouts', workoutsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/auth', authRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
