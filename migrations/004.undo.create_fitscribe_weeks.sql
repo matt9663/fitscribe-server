@@ -1,0 +1,1 @@
+DROP TABLE fitscribe_weeks IF EXISTS;

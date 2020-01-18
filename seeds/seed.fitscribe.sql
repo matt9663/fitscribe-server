@@ -1,6 +1,8 @@
 BEGIN;
 
 TRUNCATE
+  fitscribe_exercises,
+  fitscribe_weeks,
   fitscribe_workouts,
   fitscribe_users
   RESTART IDENTITY CASCADE;
@@ -27,5 +29,27 @@ VALUES
       { "liftName": "Bent-over Row", "weight": 115, "reps": 12, "sets": 3, "order": 3 },
       { "liftName": "One-arm dumbell row", "weight": 50, "reps": 10, "sets": 3, "order": 4 },
       { "liftName": "Dumbell Bicep Curls", "weight": 25, "reps": 12, "sets": 4, "order": 5 }]');
+
+  INSERT INTO fitscribe_exercises (liftName, muscle_group)
+  VALUES
+      ('Barbell bench press', 'Chest'),
+      ('Cable chest flys', 'Chest'),
+      ('Pull-ups', 'Back'),
+      ('Incline dumbell bench press', 'Chest'),
+      ('Push-ups', 'Chest'),
+      ('Tricep cable pushdown', 'Arms'),
+      ('Barbell back squat', 'Quads'),
+      ('Deadlift', 'Hamstrings'),
+      ('Leg Press Machine', 'Quads'),
+      ('Leg Extensions', 'Quads'),
+      ('Leg Curls', 'Hamstrings'),
+      ('Leg Raises', 'Abs'),
+      ('Standing Calf Raises', 'Calves'),
+      ('Standing Overhead Press', 'Shoulders'),
+      ('Lateral Dumbell Raises', 'Shoulders'),
+      ('Bent-over Barbell Row', 'Back'),
+      ('Lat Pulldowns', 'Back'),
+      ('Hammer Curls', 'Arms'),
+      ('Crunches', 'Abs');
 
 COMMIT;
