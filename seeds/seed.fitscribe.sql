@@ -9,7 +9,7 @@ TRUNCATE
 
 INSERT INTO fitscribe_users (user_name, password, email_address)
 VALUES
-  ('matt9663','$2a$12$FSu6aNuL4G0e/e/GbDb5VOVJ1cTWpPAmEZfkwTHm4MRpybM390NXu','matt9663@gmail.com'),
+  ('test-user1','$2a$12$FSu6aNuL4G0e/e/GbDb5VOVJ1cTWpPAmEZfkwTHm4MRpybM390NXu','matt9663@gmail.com'),
   ('test-user2', '$2a$12$EebLwEhZboX1D91mGFRVuuWAFSyuVhiMxD9ypqh3dIZEZFFL0xJmq', 'fake-email@gmail.com');
 
 INSERT INTO fitscribe_workouts (title, author_id, exercises)
