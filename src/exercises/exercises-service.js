@@ -13,6 +13,7 @@ const ExercisesService = {
   },
   serializeExercise(exercise) {
      return ({
+      id: exercise.id,
       liftName: xss(exercise.liftname),
       muscle_group:xss(exercise.muscle_group)
     })

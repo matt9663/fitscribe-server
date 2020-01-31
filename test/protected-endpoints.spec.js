@@ -2,7 +2,7 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe.only('Protected endpoints', () => {
+describe('Protected endpoints', () => {
   let db
   const {
     testUsers,
@@ -12,7 +12,7 @@ describe.only('Protected endpoints', () => {
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
-      connection: process.env.TEST_DB_URL
+      connection: process.env.TEST_DATABASE_URL
     })
     app.set('db', db)
   })

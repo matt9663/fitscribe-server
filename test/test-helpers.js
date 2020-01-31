@@ -65,6 +65,26 @@ function makeWorkoutsArray(users) {
   ]
 }
 
+function makeExercisesArray() {
+  return [
+    {
+      id: 1,
+      liftname: 'Bench Press',
+      muscle_group: 'Chest'
+    },
+    {
+      id: 2,
+      liftname: 'Pull-ups',
+      muscle_group: 'Back'
+    },
+    {
+      id: 3,
+      liftname: 'Overhead Press',
+      muscle_group: 'Shoulders'
+    }
+  ]
+}
+
 function makeExpectedWorkouts(user, workouts) {
   const matchedWorkouts = workouts.filter(workout => workout.author_id === user.id)
   return matchedWorkouts.map(workout => ({
@@ -113,6 +133,15 @@ function seedWorkoutsTable(db, users, workouts) {
   })
 }
 
+function seedExercisesTable(db, exercises) {
+  return db.into('fitscribe_exercises').insert(exercises)
+    .then(() => 
+      db.raw(
+        `SELECT setval('fitscribe_exercises_id_seq', ?)`,
+        [exercises[exercises.length - 1].id]
+      ))
+}
+
 function seedMaliciousWorkout(db, user, workout) {
   return seedUsers(db, [user])
     .then(() => 
@@ -134,6 +163,8 @@ function cleanTables(db) {
   return db.transaction(trx => 
     trx.raw(
       `TRUNCATE
+        fitscribe_exercises,
+        fitscribe_weeks,
         fitscribe_workouts,
         fitscribe_users
         RESTART IDENTITY CASCADE
@@ -141,8 +172,12 @@ function cleanTables(db) {
     )
       .then(() => 
         Promise.all([
+          trx.raw(`ALTER SEQUENCE fitscribe_exercises_id_seq minvalue 0 START WITH 1`),
+          trx.raw(`ALTER SEQUENCE fitscribe_weeks_id_seq minvalue 0 START WITH 1`),
           trx.raw(`ALTER SEQUENCE fitscribe_workouts_id_seq minvalue 0 START WITH 1`),
           trx.raw(`ALTER SEQUENCE fitscribe_users_id_seq minvalue 0 START WITH 1`),
+          trx.raw(`SELECT setval('fitscribe_exercises_id_seq', 0)`),
+          trx.raw(`SELECT setval('fitscribe_weeks_id_seq', 0)`),
           trx.raw(`SELECT setval('fitscribe_workouts_id_seq', 0)`),
           trx.raw(`SELECT setval('fitscribe_users_id_seq', 0)`)
         ])
@@ -159,5 +194,7 @@ module.exports = {
   seedMaliciousWorkout,
   seedUsers,
   seedWorkoutsTable,
-  makeAuthHeader
+  makeAuthHeader,
+  makeExercisesArray,
+  seedExercisesTable
 }

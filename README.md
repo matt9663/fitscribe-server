@@ -1,26 +1,122 @@
-# Express Boilerplate!
+# FitScribe Server 
 
-This is my boilerplate Express app, to be cloned when starting new projects!
+## [Live Link](https://matt9663-fitscribe-app.now.sh/)
 
-## Set-up
+This repo contains all the files for the server of my Fitscribe app. FitScribe is designed to be an easy-to-use platform for users to build and plan workout routines. This Node/Express server connects to a PostgreSQL database that stores basic user info, lists of exercies, lists of workout routines, and weekly plan objects. The client side was constructed using React. [Client repo](https://github.com/matt9663/fitscribe-app)
 
-Complete the following steps to start a new project:
+## API
+The base URL for the API is `https://quiet-woodland-91461.herokuapp.com/`
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+## Open Endpoints 
+* ### **Login**: 
+`POST /api/login`
+  
+  Example request: 
+  ```json
+    {
+    "user_name": [valid-user-name],
+    "password": [matching-password]
+    }
+  ```
 
-## Scripts
+* ### **Create Account**: 
+`POST /api/users`
 
-Start the application `npm start`
+Example request: 
+  ```json
+  {
+  "user_name": [valid-user-name],
+  "email_address": [valid-email-address],
+  "password": [must be greater than 8 characters, contain upper, lower case, number, symbol]
+  }
+  ```
+* ### **Exercises**: 
+`GET /api/exercises`
+  Example response:
+  ```json
+  {
+  "id": 1,
+  "liftName": "Barbell Bench Press",
+  "muscle_group": "Chest"
+  }
+  ```
 
-Start nodemon for the application `npm run dev`
+## Protected Endpoints
+Protected endpoints require a valid JWT token in the request header. One can be acquired through the Login endpoint above.
 
-Run the tests `npm test`
+* ### **Workouts**: 
+  `GET /api/workouts`
+    
+    Example response: 
+    ```json
+    {
+        "id": 1,
+        "author_id": 1,
+        "title": "test-workout-1",
+        "exercises": [
+          { "liftName": "Barbell bench press", weight: "155", "reps": 8, "sets": 4, "order": 1 },
+          { "liftName": "Cable chest flys", "weight": "20", "reps": 15, "sets": 4, "order": 2 }
+        ]
+    }
+    ```
 
-## Deploying
+    `POST /api/workouts`
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+  Example request:
+  ```json
+    {
+        "title": "test-workout-1",
+        "exercises": [
+          { "liftName": "Barbell bench press", weight: "155", "reps": 8, "sets": 4, "order": 1 },
+          { "liftName": "Cable chest flys", "weight": "20", "reps": 15, "sets": 4, "order": 2 }
+        ]
+    }
+  ```
+
+* ### **Exercises**
+  `POST /api/exercises`
+
+  Example request:
+  ```json
+    {
+    "liftName": "Barbell Bench Press",
+    "muscle_group": "Chest"
+    }
+    ```
+* ### **Weeks**
+
+  `GET /api/weeks`
+
+  Example response (pulls user_id to match from auth header):
+
+  ```json
+  {
+    "id": 1,
+    "user_id": 1,
+    "sunday_workout": 1,
+    "sunday_status": true,
+    "monday_workout": 2,
+    "monday_status": true,
+    "tuesday_workout": 3,
+    "tuesday_status": false,
+    "wednesday_workout": 0,
+    "wednesday_status": false,
+    "thursday_workout": 1,
+    "thursday_status": false,
+    "friday_workout": 2,
+    "friday_status": false,
+    "saturday_workout": 3,
+    "saturday_status": false
+  }
+  ```
+
+  `PATCH /api/weeks/:week_id`
+
+    Will update any field that is included in request body.
+    Example request: 
+    ```json
+    {
+      "tuesday_status": true,
+      "friday_workout": 2
+    }
+    ```
